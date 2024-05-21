@@ -12,16 +12,34 @@ import {
   Tabs, message,
 } from 'antd';
 import { useMutation } from '@apollo/client';
-import { SEND_CODE_MSG } from '../../graphql/auth';
+import { SEND_CODE_MSG, LOGIN } from '../../graphql/auth';
 import styles from './index.module.less';
+
+interface IValue {
+  tel: string;
+  code: string;
+}
 
 export default () => {
   const [run] = useMutation(SEND_CODE_MSG);
+  const [login] = useMutation(LOGIN);
+
+  const loginHandle = async (values: IValue) => {
+    const res = await login({
+      variables: values,
+    });
+    if (res.data.login) {
+      message.success('登录成功');
+      return;
+    }
+    message.error('登录失败');
+  };
 
   return (
     <div className={styles.container}>
       <LoginFormPage
-        initialValues={{ mobile: '19357227510' }}
+        onFinish={loginHandle}
+        initialValues={{ tel: '19357227510' }}
         backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
         logo="http://water-drop-assets.oss-cn-hangzhou.aliyuncs.com/images/henglogo.png"
       >
@@ -38,7 +56,7 @@ export default () => {
               size: 'large',
               prefix: <MobileOutlined className="prefixIcon" />,
             }}
-            name="mobile"
+            name="tel"
             placeholder="手机号"
             rules={[
               {
@@ -66,7 +84,7 @@ export default () => {
               }
               return '获取验证码';
             }}
-            phoneName="mobile"
+            phoneName="tel"
             name="code"
             rules={[
               {
