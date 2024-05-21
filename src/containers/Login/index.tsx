@@ -9,7 +9,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import {
-  Tabs,
+  Tabs, message,
 } from 'antd';
 import { useMutation } from '@apollo/client';
 import { SEND_CODE_MSG } from '../../graphql/auth';
@@ -75,11 +75,17 @@ export default () => {
               },
             ]}
             onGetCaptcha={async (tel: string) => {
-              await run({
+              const res = await run({
                 variables: {
                   tel,
                 },
               });
+
+              if (res.data.sendCodeMsg) {
+                message.success('获取验证码成功');
+              } else {
+                message.error('获取验证码失败');
+              }
             }}
           />
         </>
