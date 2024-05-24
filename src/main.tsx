@@ -6,9 +6,11 @@ import { client } from './utils/apollo';
 import './index.css';
 import { ROUTE_CONFIG } from './routes';
 import Page404 from './containers/Page404';
+import UserInfo from './components/UserInfo';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ApolloProvider client={client}>
+    <UserInfo >
     <BrowserRouter>
       <Routes>
         {ROUTE_CONFIG.map((item) => (
@@ -21,5 +23,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>
+    </UserInfo>
   </ApolloProvider>,
 );

@@ -12,24 +12,33 @@ import {
   Tabs, message,
 } from 'antd';
 import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { SEND_CODE_MSG, LOGIN } from '../../graphql/auth';
 import styles from './index.module.less';
+// eslint-disable-next-line import/extensions
+import { AUTH_TOKEN } from '@/utils/constants';
 
 interface IValue {
   tel: string;
   code: string;
+  autoLogin: boolean;
 }
 
 export default () => {
   const [run] = useMutation(SEND_CODE_MSG);
   const [login] = useMutation(LOGIN);
+  const nav = useNavigate();
 
   const loginHandle = async (values: IValue) => {
     const res = await login({
       variables: values,
     });
     if (res.data.login.code === 200) {
+      if (values.autoLogin) {
+        localStorage.setItem(AUTH_TOKEN, res.data.login.data);
+      }
       message.success(res.data.login.message);
+      nav('/');
       return;
     }
     message.error(res.data.login.message);
