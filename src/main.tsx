@@ -10,19 +10,19 @@ import UserInfo from './components/UserInfo';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ApolloProvider client={client}>
-    <UserInfo >
     <BrowserRouter>
-      <Routes>
-        {ROUTE_CONFIG.map((item) => (
-          <Route
-            path={item.path}
-            key={item.key}
-            element={<item.element />}
-          />
-        ))}
-        <Route path="*" element={<Page404 />} />
-      </Routes>
+      <UserInfo >
+        <Routes>
+          {ROUTE_CONFIG.map((item) => (
+            <Route
+              path={item.path}
+              key={item.key}
+              element={<item.element />}
+            />
+          ))}
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </UserInfo>
     </BrowserRouter>
-    </UserInfo>
   </ApolloProvider>,
 );

@@ -1,22 +1,17 @@
-import {
-  LockOutlined,
-  MobileOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, MobileOutlined } from '@ant-design/icons';
 import {
   LoginFormPage,
   ProFormCaptcha,
   ProFormCheckbox,
-  ProFormText,
+  ProFormText
 } from '@ant-design/pro-components';
-import {
-  Tabs, message,
-} from 'antd';
+import { Tabs, message } from 'antd';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SEND_CODE_MSG, LOGIN } from '../../graphql/auth';
 import styles from './index.module.less';
-// eslint-disable-next-line import/extensions
 import { AUTH_TOKEN } from '@/utils/constants';
+import { useTitle } from '@/hooks';
 
 interface IValue {
   tel: string;
@@ -28,17 +23,25 @@ export default () => {
   const [run] = useMutation(SEND_CODE_MSG);
   const [login] = useMutation(LOGIN);
   const nav = useNavigate();
+  const [params] = useSearchParams();
+
+  useTitle('登录');
 
   const loginHandle = async (values: IValue) => {
     const res = await login({
-      variables: values,
+      variables: values
     });
     if (res.data.login.code === 200) {
       if (values.autoLogin) {
+        sessionStorage.setItem(AUTH_TOKEN, '');
         localStorage.setItem(AUTH_TOKEN, res.data.login.data);
+      } else {
+        localStorage.setItem(AUTH_TOKEN, '');
+        sessionStorage.setItem(AUTH_TOKEN, res.data.login.data);
       }
+
       message.success(res.data.login.message);
-      nav('/');
+      nav(params.get('orgUrl') || '/');
       return;
     }
     message.error(res.data.login.message);
@@ -54,37 +57,39 @@ export default () => {
       >
         <Tabs
           centered
-          items={[{
-            key: 'phone',
-            label: '手机号登录',
-          }]}
+          items={[
+            {
+              key: 'phone',
+              label: '手机号登录'
+            }
+          ]}
         />
         <>
           <ProFormText
             fieldProps={{
               size: 'large',
-              prefix: <MobileOutlined className="prefixIcon" />,
+              prefix: <MobileOutlined className="prefixIcon" />
             }}
             name="tel"
             placeholder="手机号"
             rules={[
               {
                 required: true,
-                message: '请输入手机号！',
+                message: '请输入手机号！'
               },
               {
                 pattern: /^1\d{10}$/,
-                message: '手机号格式错误！',
-              },
+                message: '手机号格式错误！'
+              }
             ]}
           />
           <ProFormCaptcha
             fieldProps={{
               size: 'large',
-              prefix: <LockOutlined className="prefixIcon" />,
+              prefix: <LockOutlined className="prefixIcon" />
             }}
             captchaProps={{
-              size: 'large',
+              size: 'large'
             }}
             placeholder="请输入验证码"
             captchaTextRender={(timing, count) => {
@@ -98,14 +103,14 @@ export default () => {
             rules={[
               {
                 required: true,
-                message: '请输入验证码！',
-              },
+                message: '请输入验证码！'
+              }
             ]}
             onGetCaptcha={async (tel: string) => {
               const res = await run({
                 variables: {
-                  tel,
-                },
+                  tel
+                }
               });
 
               if (res.data.sendCodeMsg.code === 200) {
@@ -118,7 +123,7 @@ export default () => {
         </>
         <div
           style={{
-            marginBlockEnd: 24,
+            marginBlockEnd: 24
           }}
         >
           <ProFormCheckbox noStyle name="autoLogin">
