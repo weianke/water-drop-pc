@@ -9,7 +9,7 @@ const UserInfo = ({ children }: IPropChild) => {
 
   return (
     <Spin spinning={loading}>
-      <div style={{ height: '100vh' }}>{children}</div>
+      <div style={{ height: '100vh', width: '100vw' }}>{children}</div>
     </Spin>
   );
 };

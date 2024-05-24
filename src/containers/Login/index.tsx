@@ -12,6 +12,7 @@ import { SEND_CODE_MSG, LOGIN } from '../../graphql/auth';
 import styles from './index.module.less';
 import { AUTH_TOKEN } from '@/utils/constants';
 import { useTitle } from '@/hooks';
+import { useUserContext } from '@/hooks/userHooks';
 
 interface IValue {
   tel: string;
@@ -24,7 +25,7 @@ export default () => {
   const [login] = useMutation(LOGIN);
   const nav = useNavigate();
   const [params] = useSearchParams();
-
+  const { store } = useUserContext();
   useTitle('登录');
 
   const loginHandle = async (values: IValue) => {
@@ -32,6 +33,8 @@ export default () => {
       variables: values
     });
     if (res.data.login.code === 200) {
+      // 刷新用户信息
+      store.refetchHandler();
       if (values.autoLogin) {
         sessionStorage.setItem(AUTH_TOKEN, '');
         localStorage.setItem(AUTH_TOKEN, res.data.login.data);
@@ -39,7 +42,6 @@ export default () => {
         localStorage.setItem(AUTH_TOKEN, '');
         sessionStorage.setItem(AUTH_TOKEN, res.data.login.data);
       }
-
       message.success(res.data.login.message);
       nav(params.get('orgUrl') || '/');
       return;
