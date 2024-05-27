@@ -14,7 +14,7 @@ const Home = () => {
     <div className={style.container}>
       首页 用户 name: {store.name}
       用户 tel:{store.tel}
-      <Button onClick={() => go(ROUTE_KEY.MY, {})}>去个人中心</Button>
+      <Button onClick={() => go(ROUTE_KEY.MY)}>去个人中心</Button>
     </div>
   );
 };
