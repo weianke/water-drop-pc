@@ -1,20 +1,10 @@
-import { HomeOutlined } from '@ant-design/icons';
-import Home from '../containers/Home';
+import Home from '@/containers/Home';
+import My from '@/containers/My';
 import Page404 from '@/containers/Page404';
+import { ROUTE_KEY } from './menus';
 
-export const ROUTE_CONFIG = [
-  {
-    key: 'home',
-    path: '/home',
-    element: Home,
-    name: '首页',
-    icon: <HomeOutlined />
-  },
-  {
-    key: '*',
-    path: '*',
-    element: Page404,
-    name: '404',
-    hideInMenu: true
-  }
-];
+export const ROUTE_COMPONENT = {
+  [ROUTE_KEY.HOME]: Home,
+  [ROUTE_KEY.MY]: My,
+  [ROUTE_KEY.PAGE_404]: Page404
+};
