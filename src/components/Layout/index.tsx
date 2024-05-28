@@ -40,7 +40,7 @@ const Layout = () => {
       }}
       menuItemRender={menuItemRender}
     >
-      <PageContainer>{outlet}</PageContainer>
+      {outlet}
     </ProLayout>
   );
 };

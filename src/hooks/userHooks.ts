@@ -22,10 +22,10 @@ export const useGetUser = () => {
       // 如果获取到用户信息，则设置到 store 中
       if (data.getUserInfo) {
         const {
-          id, name, tel, desc,
+          id, name, tel, desc, avatar
         } = data.getUserInfo;
         setStore({
-          id, name, tel, desc, refetchHandler: refetch,
+          id, name, tel, desc, avatar, refetchHandler: refetch,
         });
          // 当前在登录页面，且已经登录了，那就直接跳到首页
          if (location.pathname === '/login') {
