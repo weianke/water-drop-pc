@@ -24,9 +24,11 @@ export const useGetUser = () => {
         const {
           id, name, tel, desc, avatar
         } = data.getUserInfo;
+      
         setStore({
           id, name, tel, desc, avatar, refetchHandler: refetch,
         });
+      
          // 当前在登录页面，且已经登录了，那就直接跳到首页
          if (location.pathname === '/login') {
           nav('/');

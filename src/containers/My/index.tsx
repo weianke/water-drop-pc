@@ -9,7 +9,7 @@ import {
   ProFormTextArea
 } from '@ant-design/pro-components';
 import { useMutation } from '@apollo/client';
-import { Col, Row, message } from 'antd';
+import { Col, Row, message, Form } from 'antd';
 import { useEffect, useRef } from 'react';
 
 /**
@@ -17,7 +17,7 @@ import { useEffect, useRef } from 'react';
  */
 const My = () => {
   const formRef = useRef<ProFormInstance>();
-  const { store } = useUserContext();
+  const { store }: any = useUserContext();
   const [updateUserInfo] = useMutation(UPDATE_USER);
 
   useEffect(() => {
@@ -44,24 +44,23 @@ const My = () => {
           }
         }}
         onFinish={async values => {
-          console.log('🚀 ~ onFinish={ ~ values:', values);
           const res = await updateUserInfo({
             variables: {
               id: store.id,
               params: {
                 name: values.name,
                 desc: values.desc,
-                avatar: ''
+                avatar: values.avatar?.url || ''
               }
             }
           });
           if (res.data.updateUserInfo.code === 200) {
             // 刷新用户信息
             store.refetchHandler();
-            message.success('更新成功');
+            message.success(res.data.updateUserInfo.message);
             return;
           }
-          message.error('更新失败');
+          message.error(res.data.updateUserInfo.message);
         }}
       >
         <Row gutter={20}>
@@ -71,7 +70,9 @@ const My = () => {
             <ProFormTextArea name="desc" label="简介" placeholder="请输入简介信息" />
           </Col>
           <Col>
-            <OSSImageUpload />
+            <Form.Item name="avatar" label="头像">
+              <OSSImageUpload />
+            </Form.Item>
           </Col>
         </Row>
       </ProForm>
