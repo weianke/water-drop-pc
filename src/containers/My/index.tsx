@@ -13,11 +13,12 @@ import { Col, Row, message, Form } from 'antd';
 import { useEffect, useRef } from 'react';
 
 /**
- * 个人信息
+ *
  */
 const My = () => {
   const formRef = useRef<ProFormInstance>();
-  const { store }: any = useUserContext();
+  const { store }:any = useUserContext();
+
   const [updateUserInfo] = useMutation(UPDATE_USER);
 
   useEffect(() => {
@@ -55,7 +56,6 @@ const My = () => {
             }
           });
           if (res.data.updateUserInfo.code === 200) {
-            // 刷新用户信息
             store.refetchHandler();
             message.success(res.data.updateUserInfo.message);
             return;
@@ -70,7 +70,7 @@ const My = () => {
             <ProFormTextArea name="desc" label="简介" placeholder="请输入简介信息" />
           </Col>
           <Col>
-            <Form.Item name="avatar" label="头像">
+            <Form.Item name="avatar" label="更改头像">
               <OSSImageUpload />
             </Form.Item>
           </Col>

@@ -25,7 +25,7 @@ export default () => {
   const [login] = useMutation(LOGIN);
   const nav = useNavigate();
   const [params] = useSearchParams();
-  const { store } = useUserContext();
+  const { store }:any = useUserContext();
   useTitle('登录');
 
   const loginHandle = async (values: IValue) => {
