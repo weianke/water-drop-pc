@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import { useRef } from 'react';
 import type { UploadFile, UploadProps } from 'antd';
 import { Button, Upload } from 'antd';
 import { useQuery } from '@apollo/client';
@@ -20,7 +19,7 @@ interface OSSUploadProps {
   onChange?: (file?: UploadFile) => void;
 }
 
-const OSSimageUpload = ({ value, onChange }: OSSUploadProps) => {
+const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
   const key = useRef('');
   const { data, refetch } = useQuery<{ getOSSInfo: OSSDataType }>(GET_OSS_INFO);
 
@@ -80,9 +79,9 @@ const OSSimageUpload = ({ value, onChange }: OSSUploadProps) => {
   );
 };
 
-OSSimageUpload.defaultProps = {
+OSSImageUpload.defaultProps = {
   value: null,
   onchange
 };
 
-export default OSSimageUpload;
+export default OSSImageUpload;

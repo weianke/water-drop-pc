@@ -1,4 +1,4 @@
-import OSSImageUpload from '@/components/OSSimageUpload';
+import OSSImageUpload from '@/components/OSSImageUpload';
 import { UPDATE_USER } from '@/graphql/user';
 import { useUserContext } from '@/hooks/userHooks';
 import {
