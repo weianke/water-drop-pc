@@ -17,7 +17,7 @@ import { useEffect, useRef } from 'react';
  */
 const My = () => {
   const formRef = useRef<ProFormInstance>();
-  const { store }:any = useUserContext();
+  const { store, setStore }: any = useUserContext();
 
   const [updateUserInfo] = useMutation(UPDATE_USER);
 
@@ -56,7 +56,17 @@ const My = () => {
             }
           });
           if (res.data.updateUserInfo.code === 200) {
-            store.refetchHandler();
+            // 重新获取用户信息
+            const result = await store.refetchHandler?.();
+            // 如果获取到用户信息，则更新存储中的姓名和头像信息
+            if (result.data.getUserInfo) {
+              setStore({
+                ...store,
+                name: result.data.getUserInfo.name,
+                avatar: result.data.getUserInfo.avatar
+              });
+            }
+
             message.success(res.data.updateUserInfo.message);
             return;
           }
