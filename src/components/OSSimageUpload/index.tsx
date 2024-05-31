@@ -1,6 +1,6 @@
-import { useRef } from 'react';
-import type { UploadFile, UploadProps } from 'antd';
-import { Button, Upload } from 'antd';
+import { useRef, useState } from 'react';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
+import { Button, Upload, Image } from 'antd';
 import { useQuery } from '@apollo/client';
 import { GET_OSS_INFO } from '@/graphql/oss';
 import ImgCrop from 'antd-img-crop';
@@ -18,11 +18,20 @@ interface OSSUploadProps {
   value?: UploadFile;
   onChange?: (file?: UploadFile) => void;
 }
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
 
 const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
   const key = useRef('');
   const { data, refetch } = useQuery<{ getOSSInfo: OSSDataType }>(GET_OSS_INFO);
-
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewOpen, setPreviewOpen] = useState(false);
   const OSSData = data?.getOSSInfo;
 
   const handleChange: UploadProps['onChange'] = ({ file }) => {
@@ -62,20 +71,43 @@ const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
     return file;
   };
 
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
   return (
-    <ImgCrop rotationSlider>
-      <Upload
-        name="file"
-        listType="picture-card"
-        fileList={value ? [value] : []}
-        action={OSSData?.host}
-        onChange={handleChange}
-        data={getExtraData}
-        beforeUpload={beforeUpload}
-      >
-        + 替换头像
-      </Upload>
-    </ImgCrop>
+    <div>
+      <ImgCrop rotationSlider>
+        <Upload
+          name="file"
+          listType="picture-card"
+          fileList={value ? [value] : []}
+          action={OSSData?.host}
+          onChange={handleChange}
+          onPreview={handlePreview}
+          data={getExtraData}
+          beforeUpload={beforeUpload}
+        >
+          + 替换头像
+        </Upload>
+      </ImgCrop>
+      {previewImage && (
+        <Image
+          wrapperStyle={{ display: 'none' }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: visible => setPreviewOpen(visible),
+            afterOpenChange: visible => !visible && setPreviewImage('')
+          }}
+          src={previewImage}
+        />
+      )}
+    </div>
   );
 };
 
