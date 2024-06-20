@@ -1,6 +1,4 @@
-import { HomeOutlined } from '@ant-design/icons';
-import Home from '../containers/Home';
-import Page404 from '@/containers/Page404';
+import { HomeOutlined, ShopOutlined } from '@ant-design/icons';
 import React from 'react';
 
 interface IRoute {
@@ -13,6 +11,7 @@ interface IRoute {
 export const ROUTE_KEY = {
   HOME: 'home',
   MY: 'my',
+  ORG: 'org',
   PAGE_404: '404'
 };
 
@@ -27,6 +26,11 @@ export const ROUTE_CONFIG: Record<string, IRoute> = {
     name: '个人信息',
     hideInMenu: true,
     icon: <HomeOutlined />
+  },
+  [ROUTE_KEY.ORG]: {
+    path: 'org',
+    name: '门店管理',
+    icon: <ShopOutlined />
   },
   [ROUTE_KEY.PAGE_404]: {
     path: '*',

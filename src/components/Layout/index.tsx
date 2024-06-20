@@ -28,7 +28,7 @@ const Layout = () => {
   return (
     <ProLayout
       layout="mix"
-      siderWidth={130}
+      siderWidth={150}
       avatarProps={{
         src: store.avatar || 'global/logo.svg',
         title: store.name,
