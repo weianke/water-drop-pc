@@ -8,9 +8,7 @@ import EditOrg from './components/EditOrg';
 import style from './index.module.less';
 
 const Org = () => {
-  const {
-    loading, data, page, refetch,
-  } = useOrganizations();
+  const { loading, data, page, refetch } = useOrganizations();
   const [delHandler, delLoading] = useDeleteOrg();
 
   const [showEdit, setShowEdit] = useState(false);
@@ -39,29 +37,39 @@ const Org = () => {
     refetch({
       page: {
         pageNum,
-        pageSize,
-      },
+        pageSize
+      }
     });
   };
 
   const dataSource = data?.map((item: any) => ({
     ...item,
     key: item.id,
-    subTitle: <div>{item.tags?.split(',').map((tag: any) => (<Tag key={tag} color="#5BD8A6">{tag}</Tag>))}</div>,
+    subTitle: (
+      <div>
+        {item.tags?.split(',').map((tag: any) => (
+          <Tag key={tag} color="#5BD8A6">
+            {tag}
+          </Tag>
+        ))}
+      </div>
+    ),
     actions: [
-      <Button type="link" onClick={() => editInfoHandler(item.id)}>编辑</Button>,
+      <Button type="link" onClick={() => editInfoHandler(item.id)}>
+        编辑
+      </Button>,
       <Popconfirm
         title="提醒"
         okButtonProps={{
-          loading: delLoading,
+          loading: delLoading
         }}
         description={`确定要删除 ${item.name} 吗？`}
         onConfirm={() => delInfoHandler(item.id)}
       >
         <Button type="link">删除</Button>
-      </Popconfirm>,
+      </Popconfirm>
     ],
-    content: item.address,
+    content: item.address
   }));
 
   return (
@@ -69,10 +77,12 @@ const Org = () => {
       <PageContainer
         loading={loading}
         header={{
-          title: '门店管理',
+          title: '门店管理'
         }}
         extra={[
-          <Button key="1" type="primary" onClick={addInfoHandler}>新增门店</Button>,
+          <Button key="1" type="primary" onClick={addInfoHandler}>
+            新增门店
+          </Button>
         ]}
       >
         <ProList<any>
@@ -80,35 +90,30 @@ const Org = () => {
             defaultPageSize: DEFAULT_PAGE_SIZE,
             showSizeChanger: false,
             total: page?.total,
-            onChange: onPageChangeHandler,
+            onChange: onPageChangeHandler
           }}
           grid={{ gutter: 10, column: 2 }}
           showActions="always"
           rowSelection={false}
           metas={{
             title: {
-              dataIndex: 'name',
+              dataIndex: 'name'
             },
             subTitle: {},
             type: {},
             avatar: {
-              dataIndex: 'logo',
+              dataIndex: 'logo'
             },
             content: {
-              dataIndex: 'address',
+              dataIndex: 'address'
             },
             actions: {
-              cardActionProps: 'extra',
-            },
+              cardActionProps: 'extra'
+            }
           }}
           dataSource={dataSource}
         />
-        {showEdit && (
-        <EditOrg
-          id={curId}
-          onClose={onCloseHandler}
-        />
-        )}
+        {showEdit && <EditOrg id={curId} onClose={onCloseHandler} refetch={refetch} />}
       </PageContainer>
     </div>
   );

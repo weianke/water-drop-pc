@@ -8,13 +8,15 @@ import style from './index.module.less';
 interface IProp {
   id: string;
   onClose: () => void;
+  refetch?: () => void;
 }
 /**
  * EditOrg 表单
  */
-const EditOrg = ({ id, onClose }: IProp) => {
+const EditOrg = ({ id, onClose, refetch }: IProp) => {
   const [form] = Form.useForm();
   const { data, loading: queryLoading } = useOrganization(id);
+
   const [edit, editLoading] = useEditInfo();
 
   const onFinishHandler = async () => {
@@ -31,7 +33,9 @@ const EditOrg = ({ id, onClose }: IProp) => {
         orgRoomImg: values?.orgRoomImg?.map((item: UploadFile) => ({ url: item.url })),
         orgOtherImg: values?.orgOtherImg?.map((item: UploadFile) => ({ url: item.url }))
       } as IOrganization;
-      edit(id, formData);
+      await edit(id, formData);
+      onClose();
+      refetch?.();
     }
   };
 
