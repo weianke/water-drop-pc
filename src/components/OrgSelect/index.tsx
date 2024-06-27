@@ -16,6 +16,7 @@ const OrgSelect = ({}) => {
   const { setStore } = useUserContext();
   const { go } = useGoTo();
 
+  // 初始设置当前门店
   useEffect(() => {
     if (currentOrg()?.value) {
       setStore({
