@@ -4,9 +4,9 @@ import { Button, Popconfirm, Tag } from 'antd';
 import { DEFAULT_PAGE_SIZE } from '@/utils/constants';
 import { useDeleteOrg, useOrganizations } from '@/services/org';
 import EditOrg from './components/EditOrg';
-
 import style from './index.module.less';
 
+// 门店管理
 const Org = () => {
   const { loading, data, page, refetch } = useOrganizations();
   const [delHandler, delLoading] = useDeleteOrg();

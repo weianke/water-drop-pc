@@ -4,8 +4,9 @@ import { ROUTE_KEY, routes } from '@/routes/menus';
 import { AUTH_TOKEN } from '@/utils/constants';
 import { MenuDataItem, ProLayout } from '@ant-design/pro-components';
 import { Link, useNavigate, useOutlet } from 'react-router-dom';
-import { Space } from 'antd';
-import { LogoutOutlined } from '@ant-design/icons';
+import { Space, Tooltip } from 'antd';
+import { LogoutOutlined, ShopOutlined } from '@ant-design/icons';
+import OrgSelect from '../OrgSelect';
 
 const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
   <Link to={item.path || '/'}>{dom}</Link>
@@ -53,6 +54,12 @@ const Layout = () => {
         path: '/',
         routes: routes
       }}
+      actionsRender={() => [
+        <OrgSelect />,
+        <Tooltip title="门店管理">
+          <ShopOutlined onClick={() => go(ROUTE_KEY.ORG)} />
+        </Tooltip>
+      ]}
       menuItemRender={menuItemRender}
     >
       {outlet}

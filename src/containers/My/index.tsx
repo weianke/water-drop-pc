@@ -27,9 +27,11 @@ const My = () => {
       tel: store.tel,
       name: store.name,
       desc: store.desc,
-      avatar: {
-        url: store.avatar
-      }
+      avatar: [
+        {
+          url: store.avatar
+        }
+      ]
     });
   }, [store]);
   return (
@@ -45,13 +47,14 @@ const My = () => {
           }
         }}
         onFinish={async values => {
+          console.log('提交表单数据', values);
           const res = await updateUserInfo({
             variables: {
               id: store.id,
               params: {
                 name: values.name,
                 desc: values.desc,
-                avatar: values.avatar?.url || ''
+                avatar: values.avatar[0]?.url || ''
               }
             }
           });
@@ -80,7 +83,7 @@ const My = () => {
             <ProFormTextArea name="desc" label="简介" placeholder="请输入简介信息" />
           </Col>
           <Col>
-            <Form.Item name="avatar" label="更改头像">
+            <Form.Item label="更改头像" name="avatar">
               <OSSImageUpload />
             </Form.Item>
           </Col>

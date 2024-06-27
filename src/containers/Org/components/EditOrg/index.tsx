@@ -61,9 +61,13 @@ const EditOrg = ({ id, onClose, refetch }: IProp) => {
       onClose={onClose}
       loading={queryLoading || editLoading}
       open
-      footerStyle={{ textAlign: 'right' }}
       footer={
-        <Button loading={editLoading} type="primary" onClick={onFinishHandler}>
+        <Button
+          loading={editLoading}
+          type="primary"
+          style={{ float: 'right' }}
+          onClick={onFinishHandler}
+        >
           保存
         </Button>
       }
